@@ -1,0 +1,13 @@
+{
+    "users": [{
+            "login": "admin",
+            "hash": "$2a$10$PqCQm1YaPcvxGMTyt2GPieWsW9jkeQpdnydTrKggwqj0JmCBHY6Bm",
+            "role": "ADMIN"
+        },
+        {
+            "login": "user",
+            "hash": "$2a$10$PqCQm1YaPcvxGMTyt2GPieWsW9jkeQpdnydTrKggwqj0JmCBHY6Bm",
+            "role": "USER"
+        }
+    ]
+}

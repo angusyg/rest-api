@@ -1,0 +1,31 @@
+{
+    "name": "DemoApp",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "startc": "concurrently \"gulp watch\" \"supervisor --watch . ./server/server.js\"",
+        "start": "supervisor --watch . ./server/server.js",
+        "start:prod": "set NODE_ENV=production&& supervisor ./server/server.js"
+    },
+    "dependencies": {
+        "bcrypt": "^1.0.3",
+        "body-parser": "^1.18.2",
+        "cookie-parser": "^1.4.3",
+        "debug": "^3.1.0",
+        "express": "^4.16.2",
+        "helmet": "^3.9.0",
+        "jsonwebtoken": "^8.1.0",
+        "uuid": "^3.1.0",
+        "winston": "^2.4.0",
+        "winston-daily-rotate-file": "^1.7.2"
+    },
+    "devDependencies": {
+        "concurrently": "^3.5.1",
+        "gulp": "^3.9.1",
+        "gulp-batch-replace": "0.0.0",
+        "gulp-livereload": "^3.8.1",
+        "gulp-load-plugins": "^1.5.0",
+        "gulp-rename": "^1.2.2",
+        "supervisor": "^0.12.0"
+    }
+}
