@@ -9,7 +9,8 @@ middlewares.loginRequired = function(req, res, next) {
     if (req.cookies && req.cookies[config.token.access.cookie.name]) {
         jsonwebtoken.verify(req.cookies[config.token.access.cookie.name], config.token.secretKey, function(err, decode) {
             if (err) res.status(config.httpStatus.unauthorizedAccess).json({
-                message: err.name + ' - ' + err.message,
+                error: err.name,
+                message: err.message,
                 reqId: req.uuid
             });
             else {
@@ -18,7 +19,8 @@ middlewares.loginRequired = function(req, res, next) {
             }
         });
     } else res.status(config.httpStatus.unauthorizedAccess).json({
-        message: 'No access token found',
+        error: 'NoAccessTokenFound',
+        message: 'No access token found in cookies',
         reqId: req.uuid
     });
 };
@@ -30,7 +32,8 @@ middlewares.requireRole = function(roles) {
                 return role === req.user.role;
             })) next();
         else res.status(config.httpStatus.unauthorizedOperation).json({
-            message: 'Unauthorized operation',
+            error: 'UnauthorizedOperation',
+            message: 'User roles unauthorized to perform operation',
             reqId: req.uuid
         });
     };
@@ -63,6 +66,7 @@ middlewares.errorHandler = function(err, req, res, next) {
         else logger.error('Internal error: "' + err.stack + '" => ' + config.httpStatus.serverError + ' sent');
     }
     res.json({
+        error: 'ServerError',
         message: err.message,
         stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
         reqId: req.uuid

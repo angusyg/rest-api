@@ -26,7 +26,7 @@ var uuidv4 = require('uuid/v4'),
             cookie: {
                 name: 'AccessToken',
                 opts: {
-                    maxAge: 1000 * expirationTimeAccessToken,
+                    maxAge: 1000 * expirationTimeAccessToken * 24,
                     httpOnly: true
                 }
             }

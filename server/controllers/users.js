@@ -11,7 +11,8 @@ controller.login = function(req, res) {
             res.cookie(config.token.refresh.cookie.name, tokens.refreshToken, config.token.refresh.cookie.opts);
             res.status(config.httpStatus.noContent).send();
         } else res.status(config.httpStatus.unauthorizedAccess).json({
-            message: 'Authentication failed',
+            error: 'AuthenticationError',
+            message: 'Bad credentials',
             reqId: req.uuid
         });
     });
@@ -28,17 +29,20 @@ controller.refreshToken = function(req, res) {
                         res.cookie(config.token.access.cookie.name, tokens.accessToken, config.token.access.cookie.opts);
                         res.status(config.httpStatus.noContent).send();
                     } else res.status(config.httpStatus.unauthorizedAccess).json({
-                        message: 'Refreshing authentication failed - no valid refresh token found',
+                        error: 'RefreshingAuthenticationError',
+                        message: 'No valid refresh token found in cookies',
                         reqId: req.uuid
                     });
                 });
             } else res.status(config.httpStatus.unauthorizedAccess).json({
-                message: 'Refreshing authentication failed - bad access token',
+                error: 'RefreshingAuthenticationError',
+                message: 'Bad access token in cookies',
                 reqId: req.uuid
             });
         });
     } else res.status(config.httpStatus.unauthorizedAccess).json({
-        message: 'Refreshing authentication failed - no access token to refresh found',
+        error: 'RefreshingAuthenticationError',
+        message: 'No access token to refresh found in cookies',
         reqId: req.uuid
     });
 };
