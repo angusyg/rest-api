@@ -18,6 +18,22 @@ controller.login = function(req, res) {
     });
 };
 
+controller.logout = function(req, res) {
+    if (req.cookies && req.cookies[config.token.access.cookie.name] && req.cookies[config.token.refresh.cookie.name]) {
+        jsonwebtoken.verify(req.cookies[config.token.access.cookie.name], config.token.secretKey, function(err, decode) {
+            if ((err && err.name === 'TokenExpiredError') || !err) {
+                var user = jsonwebtoken.decode(req.cookies[config.token.access.cookie.name]);
+                usersService.logout(req.cookies[config.token.refresh.cookie.name], user.login, function(err) {
+                    if (err) throw err;
+                });
+            }
+        });
+    }
+    res.clearCookie(config.token.access.cookie.name);
+    res.clearCookie(config.token.refresh.cookie.name);
+    res.status(config.httpStatus.noContent).send();
+};
+
 controller.refreshToken = function(req, res) {
     if (req.cookies && req.cookies[config.token.access.cookie.name] && req.cookies[config.token.refresh.cookie.name]) {
         jsonwebtoken.verify(req.cookies[config.token.access.cookie.name], config.token.secretKey, function(err, decode) {

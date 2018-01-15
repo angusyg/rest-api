@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken'),
     userModel = require('../models/users'),
     config = require('../../config').load(),
     uuidv4 = require('uuid/v4'),
-    refreshTokens = [],
+    refreshTokens = new Map(),
     service = {};
 
 service.login = function(infos, callback) {
@@ -12,7 +12,7 @@ service.login = function(infos, callback) {
         userModel.comparePassword(infos.password, user.hash, function(err, isMatch) {
             if (err) return callback(err);
             var refreshToken = uuidv4();
-            refreshTokens[refreshToken] = user.login;
+            refreshTokens.set(refreshToken, user.login);
             callback(null, {
                 refreshToken: refreshToken,
                 accessToken: jwt.sign({
@@ -23,6 +23,11 @@ service.login = function(infos, callback) {
             });
         });
     });
+};
+
+service.logout = function(refreshToken, login, callback) {
+    if (refreshTokens.get(refreshToken) === login) refreshTokens.delete(refreshToken);
+    callback(null);
 };
 
 service.refreshLogin = function(refreshToken, login, callback) {

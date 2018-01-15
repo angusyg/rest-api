@@ -5,9 +5,8 @@ var express = require('express'),
 
 router.post('/auth', users.login);
 router.get('/refreshToken', users.refreshToken);
+router.get('/logout', users.logout);
 
 router.use('/secure/*', appMiddleware.loginRequired);
-
-//router.post('/secure/add', appMiddleware.requireRole(['ADMIN']), users.login);
 
 module.exports = router;
