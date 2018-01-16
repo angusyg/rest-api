@@ -3,6 +3,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     helmet = require('helmet'),
+    cors = require('cors'),
     // custom middlewares
     appMiddleware = require('./server/middlewares'),
     // modules routes
@@ -15,13 +16,14 @@ var app = express();
 app.set('config', config);
 
 // middlewares
+app.use(appMiddleware.generateRequestUUID);
 app.use(helmet());
+app.use(cors(config.crossOrigin));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use(appMiddleware.generateRequestUUID);
 
 // map modules routes
 app.use('/api', apiRoute);
